@@ -15,17 +15,21 @@ public abstract class AbstractTemplate<T> {
         this.trace = trace;
     }
 
-    public T execute(String message)
+    public T execute(String message) // 추상클래스에서 일반 메서드는 템플릿이다.
     {
         TraceStatus status = null;
+
         try {  // try 블록 안에서만 유효
             // 클린코드 3장 : try catch 구문 안의 코드는 한줄로 줄이자. 외부로 메서드 추출 해주는게 좋음
             status = trace.begin(message);
+
             //로직 호출
             T result = call();
 
             trace.end(status);
+
             return result;
+
         }catch (Exception e)
         {
             trace.exception(status,e);  // e를 throw 안해주면 에러가 발생하지 않는다. 정상 흐름으로 변하면 안된다.
@@ -33,5 +37,6 @@ public abstract class AbstractTemplate<T> {
         }
     }
 
+    // abstract만 자식이 구현하는 것이다. 내부 익명 클래스로 구현 가능하다!
     protected abstract T call();
 }
